@@ -1,0 +1,123 @@
+
+
+
+ FirebaseFirestore.instance.collection("users").get().then((querySnapshot) {//users query
+  querySnapshot.docs.forEach((result) {//loop all users
+   FirebaseFirestore.instance 
+        .collection("orders")
+        .doc(result.id)
+        .collection("user_orders")
+        .where('driversuid', isEqualTo: user.uid)
+        .get()
+        .then((querySnapshot) { //orders query
+      querySnapshot.docs.forEach((result) {//loop all their orders
+        print(result.data());
+      });
+    });
+  });
+});
+}
+
+MyButton(placeHolder:'hi'
+                       ,pressed: (){
+                         CollectionReference reference=FirebaseFirestore.instance.collection("users");
+                                    return
+                                    reference.get().then((querySnapshot) {//users query
+  querySnapshot.docs.forEach((result) {//loop all users
+   FirebaseFirestore.instance 
+        .collection("orders")
+        .doc(result.id)//all users id
+        .collection("user_orders")
+        .where('driversuid', isEqualTo: user.uid)
+        .get()
+        .then((querySnapshot) { //orders query
+      querySnapshot.docs.forEach((result) {//loop all their orders
+        print(result.data());
+      });
+    });
+  });
+});
+
+  Stream<List<Orders>> getData() async* {
+    var ordersStream = FirebaseFirestore.instance
+        .collection("ords")
+        .doc()
+        .collection("user_orders")
+        .snapshots();
+    var messages = List<Orders>();
+    await for (var messagesSnapshot in ordersStream) {
+      for (var messageDoc in messagesSnapshot.docs) {
+        var message;
+        if (messageDoc["uid"] != null) {
+          var userSnapshot = await FirebaseFirestore.instance.collection("uers").doc(messageDoc["uid"]).get();
+          message = Orders(messageDoc["message"], messageDoc["Time"], messageDoc["uid"], userSnapshot["userName"]);
+        }
+        else {
+          message = Orders(messageDoc["message"], messageDoc["timestamp"], "", "");
+        }
+        messages.add(message);
+      }
+      yield messages;
+    }
+  }
+
+
+   var streamBuilder = StreamBuilder<List<Orders>>(
+          stream: getData(),
+      builder: (BuildContext context, AsyncSnapshot<List<Orders>> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        return Scaffold(
+                  body: new ListView(
+
+            
+            children: snapshot.data .map((Orders orders) {
+               
+              return new ListTile(
+                title: new Text(orders.user),
+                );
+            }).toList(),
+          ),
+        );
+      }
+      );
+       return streamBuilder;
+
+
+       _combineStream = FirebaseFirestore.instance
+        .collection('chat')
+        .orderBy("timestamp", descending: true)
+        .snapshots()
+        .map((convert) {
+      return convert.docs.map((f) {
+
+        Stream<Orders> messages = Stream.value(f)
+            .map<Orders>((document) => Orders.fromSnapshot(document));
+
+        Stream<Users> user = FirebaseFirestore.instance
+            .collection("users")
+            .doc(f['uid'])
+            .snapshots()
+            .map<Users>((document) => Users.fromSnapshot(document));
+
+        return CombineLatestStream.combine2(
+            messages, user, (messages, user) => CombineStream(messages, user));
+      });
+    }).switchMap((observables) {
+      return observables.length > 0
+          ? CombineLatestStream.list(observables)
+          : Stream.value([]);
+    });
+
+    class CombineStream {
+  final Orders orders;
+  final Users users;
+
+  CombineStream(this.orders, this.users);
+}
