@@ -8,7 +8,6 @@ import 'package:dispacher_app/welcomeScreen.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -80,12 +79,12 @@ class _MyAppState extends State<MyApp> {
     @override
   void initState() {
     super.initState();
-    configOneSignel();
+   
   }
 
   void configOneSignel()
   {
-    OneSignal.shared.init(appId);
+    // OneSignal.shared.init(appId);
   }
   
   @override

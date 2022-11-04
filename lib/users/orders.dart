@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dispacher_app/drivers/driver_profile_pop.dart';
+import 'package:dispacher_app/drivers/drivers_location.dart';
 import 'package:dispacher_app/main.dart';
 import 'package:dispacher_app/models/user.dart';
 import 'package:flutter/material.dart';
@@ -61,12 +63,20 @@ class Orders extends StatelessWidget {
                     dynamic orderData=document.data();
               return Card(
                     child:ListTile(
-                              title: Text( orderData['driversName'] ?? '',
-                                        style: TextStyle(
-                                          color: Color(MyApp().myred,),
-                                          fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                              title: SizedBox(
+                                width: 50,
+                                child: Wrap(
+                                             children: [
+                                              Text( orderData['driversName'] ?? '',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Color(MyApp().myred,),
+                                                fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                ),
+                              ),
                               subtitle: Padding(
                                 padding: EdgeInsets.all(1.0),
                                 child: Column(
@@ -130,7 +140,7 @@ class Orders extends StatelessWidget {
                                                       children: [
                                                         
                                                     Text(
-                                                      'Bosso dfdsadsadfdhgjhfhfjhfjh',
+                                                      orderData['pickup location'] ?? '',
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(
@@ -192,12 +202,29 @@ class Orders extends StatelessWidget {
                                             ),
                                          ),
                               onTap:() => {
-                                // showDialog(context: context,
-                                //     builder: (BuildContext context){
+                                showDialog(context: context,
+                                    builder: (BuildContext context){
                                      
-
-                                //      }        
-                                //   ),
+                                       return DriverDetails(
+                                   
+                                   title: orderData['driversName'],
+                                    phone: orderData['driverPhone'] ?? '',
+                                    pickuplocation: orderData['pickup location'] ?? '',
+                                    userType: 'Driver',
+                                      trackDriver: ()async{
+                                         Navigator.of(context).push(
+                                              MaterialPageRoute(builder: (context) => 
+                                              DriversLocation(uid: orderData['driversuid'],driversName:orderData['driversName'])));
+                                      },
+                                      placeHolder: 'Go Back',
+                                      pressed: (){
+                                        Navigator.pop(context);
+                                      },                         
+                                       
+                                        
+                                     );
+                                     }        
+                                  ),
                               }),
                             );
                     },

@@ -1,36 +1,34 @@
 import 'package:dispacher_app/authenticated.dart';
-import 'package:dispacher_app/components/bottomNav.dart';
-import 'package:dispacher_app/drivers/drivers_dashboard.dart';
-import 'package:dispacher_app/drivers/drivers_register.dart';
 import 'package:dispacher_app/login.dart';
+import 'package:dispacher_app/register.dart';
 import 'package:dispacher_app/services/drivers_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dispacher_app/auth_page.dart';
+import '../auth_page.dart';
 import 'package:dispacher_app/components/no_account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:dispacher_app/components/constants.dart';
+import '../components/constants.dart';
 import 'package:dispacher_app/services/auth.dart';
-import 'package:dispacher_app/components/loading.dart';
+import '../components/loading.dart';
+import '../main.dart';
 
-class DriversLogin extends StatefulWidget {
+class ResetPassword extends StatefulWidget {
   @override
-  _DriversLoginState createState() => _DriversLoginState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _DriversLoginState extends State<DriversLogin> {
-    final AuthService _authService=AuthService();
-
+class _ResetPasswordState extends State<ResetPassword> {
+    final AuthService _authService= AuthService();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
     //state of text field
     String email='';
-    String password='';
     String error='';
     bool obscureText=true;
       bool loading=false;
      Future <bool> _onBackPressed(){
     
     return Navigator.of(context).push(
-                     MaterialPageRoute(builder: (context) => Login()),
+                     MaterialPageRoute(builder: (context) => AuthPage()),
                      );
   }
   @override
@@ -49,7 +47,7 @@ class _DriversLoginState extends State<DriversLogin> {
                     
                     Center(
                           child: Text(
-                        'DRIVERS LOGIN',
+                        'Reset Password',
                         style: TextStyle(
                             fontSize: 22.0,
                           color: Color(int.parse("0xff54a2d6")),
@@ -85,37 +83,7 @@ class _DriversLoginState extends State<DriversLogin> {
                           SizedBox(
                               height:20,
                           ),
-                          TextFormField(
-                            validator: (val)=> val.length < 6 ? 'Enter a valid password' : null,
-                                    obscureText: obscureText,
-                                  decoration:textFieldDecoration.copyWith(
-                                      prefixIcon: Icon(
-                                      Icons.lock,
-                                      color: iconsColor,
-                                      ),
-                                       
-                                    suffixIcon: IconButton(
-                                          icon: const Icon(Icons.visibility),
-                                          color:iconsColor,
-                                          onPressed: () {
-                                           if(obscureText==true){
-                                              setState(() {
-                                                obscureText=false;
-                                              });
-                                            }
-                                            else{
-                                              setState(() {
-                                          obscureText=true;   
-                                            });
-                                            }
-                                          },
-                                      ),
-                                      hintText: 'Enter Password',
-                                  ) ,
-                                    onChanged: (val){
-                                        setState(() =>password=val);
-                                    },
-                          ),   
+                            
                             Text(
                                     error,
                                     style: TextStyle(color: Colors.red),
@@ -124,7 +92,7 @@ class _DriversLoginState extends State<DriversLogin> {
                              ),
                            )
                     ),
-                  
+                  //button container
                   Container(
                                 padding: EdgeInsets.all(20.0),
                                 child: SizedBox(
@@ -135,23 +103,33 @@ class _DriversLoginState extends State<DriversLogin> {
                                     onPressed:() async{
                                       if(_formKey.currentState.validate()){
                                         setState(() => loading=true);
-                                        dynamic result= await _authService.signIn(email, password);
-                                        if(result==null){
-                                          setState(() {
-                                            error= 'Error DriversLogin In';
-                                             loading=false;
-                                          });
+                                        try {
+                                            await _firebaseAuth.sendPasswordResetEmail(email : email.toLowerCase().trim(),);
+                                       
+                                      
+                                        
+                                          Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) =>Login()));
+                                       ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                                  SnackBar(
+                                                    backgroundColor: Color(MyApp().myred),
+                                                    content: Text('Changed Successfully, Login')
+                                                      )
+                                                );
+                                        } catch (e) {
+                                            setState(() {
+                                                error= 'Your email is not valid';
+                                                 loading=false;
+                                              });
                                         }
-                                        else{
-                                          Navigator.of(context).pushAndRemoveUntil(
-                                            MaterialPageRoute(builder: (context) =>
-                                            BottomNav()), (Route<dynamic> route) => false);
-                                        }
+                                       
+                                        
                                      }
                                         },
                                     color: Color(int.parse("0xffe37029")),
                                     child: Text(
-                                      'SIGN IN',
+                                      'Send Request',
                                         style:TextStyle(
                                           color:Colors.white,
                                         ),
@@ -161,17 +139,12 @@ class _DriversLoginState extends State<DriversLogin> {
 
                                 ),
                                 ),
-                        //         NoAccount(
-                        //           title: ' Register',subT:'Sign Up As Driver',
-                        //        pressed: (){
-                        //   setState(() => loading=true);
-                        //   Navigator.push(context,
-                        //           MaterialPageRoute(builder: (context) =>DriversRegister()));
-                        // },
-                        // )
+                                
+                       
                   ]
                      ),
                   ),
+                  
           ],
         ),
       ),

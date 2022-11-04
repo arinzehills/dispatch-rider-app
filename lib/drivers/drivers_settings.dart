@@ -52,10 +52,11 @@ class _DriversSettingsState extends State<DriversSettings> {
                                     ),
                                      icon: Icon(Icons.account_circle, color: Colors.white,),
                                   onPressed: () async{
-                                    await _auth.signOut();
+                                 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) => DriversLogin()),
                                         );
+                                        await _auth.signOut() ;
                                       }
                                   )
             ],
@@ -69,7 +70,7 @@ class _DriversSettingsState extends State<DriversSettings> {
                   children: <Widget>[
                     Center(
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/2.JPG'),
+                        backgroundImage: AssetImage('assets/avatar.png'),
                         radius: 40.0,
                       ),
                     ),

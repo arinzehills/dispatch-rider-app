@@ -1,5 +1,8 @@
+//this is the page that shows the two login and sign up button, so the user choses where to go
+
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'main.dart';
 import 'register.dart';
 import 'components/loading.dart';
 import 'welcomeScreen.dart';
@@ -9,13 +12,31 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  bool loading=false;
+  bool loading=false;// show the loading widget
   bool pop=true;
+  // function pushes user backs to welcome screen
+
   
 Future <bool> _onBackPressed(){
     
-    return Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-    WelcomeScreen()), (Route<dynamic> route) => false);
+     return showDialog(
+      context: context,
+      builder:(context)=>AlertDialog(
+        title:Text('Do You want to Exit?'),
+        actions: <Widget>[
+          RaisedButton(
+            child: Text('no'),
+            color: Color(MyApp().myred),
+             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            onPressed:()=> Navigator.pop(context,false),
+          ),
+          RaisedButton(
+            child: Text('Yes'),
+            onPressed:()=> Navigator.pop(context,true),
+          ),
+        ]
+      ),
+    );
   }
   @override
   Widget  build(BuildContext context) {
@@ -68,7 +89,7 @@ Future <bool> _onBackPressed(){
                            },
                       color: Color(int.parse("0xffe37029")),
                       child: Text(
-                        'lOGIN',
+                        'LOGIN',
                           style:TextStyle(
                             color:Colors.white,
                           ),
@@ -95,7 +116,7 @@ Future <bool> _onBackPressed(){
                                         },
                                     color: Color(int.parse("0xffffa693")),
                                     child: Text(
-                                      'SIGN UP',
+                                      'Get Started',
                                         style:TextStyle(
                                           color:Colors.white,
                                         ),

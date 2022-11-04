@@ -69,7 +69,7 @@ class _DriversRegisterState extends State<DriversRegister> {
                         padding: EdgeInsets.all(20.0),
                        height: 130,
                         child:
-                        Image.asset('assets/delivery2.png')
+                        Image.asset('assets/dispatch_app_icon.png')
               ),
                     
                       SingleChildScrollView(

@@ -29,7 +29,7 @@ class Profile extends StatelessWidget {
                   children: <Widget>[
                     Center(
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/2.JPG'),
+                        backgroundImage: AssetImage('assets/avatar.png'),
                         radius: 40.0,
                       ),
                     ),

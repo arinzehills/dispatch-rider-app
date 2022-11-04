@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dispacher_app/components/my_button.dart';
+import 'package:dispacher_app/drivers/driver_profile_pop.dart';
+import 'package:dispacher_app/drivers/drivers_location.dart';
 import 'package:dispacher_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:dispacher_app/main.dart';
@@ -93,7 +95,7 @@ class DriversOrders extends StatelessWidget {
                                                       children: [
                                                         
                                                     Text(
-                                                      ' '+orderData['Date'].toString(),
+                                                      ' ' + orderData['Date'].toString(),
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(
@@ -139,7 +141,7 @@ class DriversOrders extends StatelessWidget {
                                                       children: [
                                                         
                                                     Text(
-                                                      'Bosso dfdsadsadfdhgjhfhfjhfjh',
+                                                      orderData['pickup location'] ?? '',
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(
@@ -201,12 +203,29 @@ class DriversOrders extends StatelessWidget {
                                             ),
                                          ),
                               onTap:() => {
-                                // showDialog(context: context,
-                                //     builder: (BuildContext context){
-                                     
+                                showDialog(context: context,
+                                    builder: (BuildContext context){
+                                     return DriverDetails(
+                                   
+                                   title: orderData['CustomersName'],
+                                    phone: orderData['CustomersPhone'] ?? '',
+                                    pickuplocation: orderData['pickup location'] ?? '',
+                                    userType:'Customer',
+                                      trackDriver: () async{
+                                         await Navigator.of(context).push(
+                                              MaterialPageRoute(builder: (context) => 
+                                              DriversLocation(uid: orderData['Customeruid'],driversName:orderData['CustomersName'])));
+                                      },
+                                      placeHolder: 'Go Back',
+                                      pressed: (){
+                                        Navigator.pop(context);
+                                      },                         
+                                       
+                                        
+                                     );
 
-                                //      }        
-                                //   ),
+                                     }        
+                                  ),
                               }),
                             );
                     },

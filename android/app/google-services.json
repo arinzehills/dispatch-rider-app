@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "724930338415",
-    "project_id": "dispatch-rider-c3831",
-    "storage_bucket": "dispatch-rider-c3831.appspot.com"
+    "project_number": "502331130825",
+    "project_id": "dispatch-18505",
+    "storage_bucket": "dispatch-18505.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:724930338415:android:a43d92a94748e0bb31f79a",
+        "mobilesdk_app_id": "1:502331130825:android:09c2d7c00acd229cd81e18",
         "android_client_info": {
           "package_name": "com.example.dispacher_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "724930338415-m85u0ui2tib8e31sbje2f30dqqvre83n.apps.googleusercontent.com",
+          "client_id": "502331130825-bdfr2jlgbhg0ot29jo7uc22i7t7sg6af.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBjPxkKq8fqeEO5JC_XSde1JiB7pR3pJXA"
+          "current_key": "AIzaSyAyOXkI-t-p-0pFfF-k5w8UFLSQMdRW4X4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "724930338415-m85u0ui2tib8e31sbje2f30dqqvre83n.apps.googleusercontent.com",
+              "client_id": "502331130825-bdfr2jlgbhg0ot29jo7uc22i7t7sg6af.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

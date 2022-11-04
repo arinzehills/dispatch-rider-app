@@ -65,18 +65,63 @@ Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
           body:Column(
             children:<Widget> [
                 dashBoard(context,snapshot.data.size.toString()),
+                //here you set where the driver will set his avalabilty
+                // Row(
+                //   children: [
+                //       Padding(
+                //         padding: const EdgeInsets.only(left:18.0),
+                //         child: Text(
+                //           'Set wether you are available or not ',
+                //           style:TextStyle(
+                //             color: Color(MyApp().myred),
+                //           )
+                //         ),
+                //       )
+                //   ],
+                // ),
+                //  Row(
+                //         children: [
+                //            Padding(
+                //              padding: const EdgeInsets.only(left:8.0),
+                //              child: StreamBuilder<Object>(
+                //                stream: FirebaseFirestore.instance
+                //                   .collection('users')
+                //                   .doc(user.uid)
+                //                   .snapshots(),
+                //                builder: (context, snapshot) {
+                //                  return FlatButton.icon(
+                //                               onPressed: (){
+                //                                 Navigator.of(context).push(
+                //                       MaterialPageRoute(builder: (context) => DriversDashboard()));
+                //                               },
+                //                               icon: Icon(
+                //                                 Icons.toggle_on, 
+                //                                 size: 30,
+                //                                 color: Colors.green,), 
+                //                               label: Text(
+                //                                 'Available',
+                //                                maxLines: 1,
+                //                                 overflow: TextOverflow.ellipsis,
+                //                                 style: TextStyle(
+                //                                   color: Colors.green,
+                //                                   fontSize: 15
+                //                                 ),
+                //                                 ),
+                //                             );
+                //                }
+                //              ),
+                //            ),
+                         
+                //         ],
+                //       ),
                 Spacer(),
+                
                         ]
                       ) 
                     );
          }
         else{
-             return Scaffold(
-               appBar:AppBar(
-                 title: Text('Orders'),
-               ),
-               body: Center(child: CircularProgressIndicator()),
-               );
+             return Loading();
             }
       }
     );
@@ -84,12 +129,14 @@ Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
             //dashboard card
              Widget dashBoard(BuildContext context,var orders){
             return   SizedBox(
+              
           height: 251,
           child: Card(
+            
           color:Colors.deepOrangeAccent,
             margin: EdgeInsets.all(16),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(bottom :30.0, left:8,),
               child: Column(
                 
                 children: [
@@ -173,7 +220,8 @@ Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
                              
                         )
                       ],
-                    )
+                    ),
+                     
                   ],
                   
                 ),

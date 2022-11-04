@@ -47,7 +47,23 @@ class _EditDetailsState extends State<EditDetails> {
                    stream: DataBaseService(uid: user.uid).userData,
                    builder: (context, snapshot) {
                      if(snapshot.hasData){
-          UsersDetail userData= snapshot.data;
+                      UsersDetail userData= snapshot.data;
+                      String validatePhone(val){
+                        if(widget.hintText==userData.phone){
+                          if(val.length <11 ){
+                            return ' Phone number must not be less than 11 characters';
+                          }
+                          else if(val.isEmpty){
+                            return 'required';
+                          }
+                          else{
+                            return null;
+                          }
+                        }
+                        else if(val.isEmpty){
+                          return 'required';
+                        }
+                      }
                      return Container(
                       padding: EdgeInsets.only(left:1,top:10, right:1,bottom:20),
                       margin: EdgeInsets.only(top: Constants.avatarRadius*5),
@@ -73,11 +89,12 @@ class _EditDetailsState extends State<EditDetails> {
                         SizedBox(height: 22,),
                      
                                             Form(
+                                              autovalidateMode: AutovalidateMode.always,
                                      key: _formKey,
                                             child: Column(
                                           children: <Widget>[
                                               TextFormField(
-                                                validator: (val)=> val.isEmpty ? 'Enter an Email' : null,
+                                                validator: validatePhone,
                                               decoration:textFieldDecoration.copyWith(
                                               prefixIcon: Icon(
                                               Icons.person,

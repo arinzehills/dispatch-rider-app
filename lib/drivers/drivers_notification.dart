@@ -64,7 +64,7 @@ class DriversNotification extends StatelessWidget {
                                   Image.asset('assets/delivery6.png')
                         ),
                         Text(
-                          'No Orders Yet!',
+                          'No notifications yet!',
                           style: TextStyle(
                             color: Color(MyApp().myred),
                             fontWeight: FontWeight.bold,

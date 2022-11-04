@@ -16,12 +16,16 @@ class DriverDetails extends StatefulWidget {
   final Function pressed;
   final Function trackDriver;
   final String placeHolder;
+  Widget textField;
+  final String userType;
+  final String pickuplocation;
   DriverDetails({
+    this.textField,
                   this.id,
                   this.placeHolder,this.pressed,
                   this.stream,this.title, contents,
-                   this.phone, this.email,
-                   this.trackDriver});
+                   this.phone, this.email,this.pickuplocation,
+                   this.trackDriver,this.userType});
 
   @override
   _DriverDetailsState createState() => _DriverDetailsState();
@@ -59,8 +63,20 @@ class _DriverDetailsState extends State<DriverDetails> {
                   child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                      Text(widget.title,
-                            style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
+                      SizedBox(
+                        width: 290,
+                        child: Center(
+                          child: Wrap(
+                                      
+                                     children: [
+                                    Text(widget.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
+                                  ],
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 2,),
                       Padding(
                         padding: EdgeInsets.only(top:0, bottom:0),
@@ -87,12 +103,12 @@ class _DriverDetailsState extends State<DriverDetails> {
                                       SizedBox(height:4),
                                       FlatButton.icon(
                                         onPressed: (){
-                                         launch("mailto:${widget.email}");
+                                        //  launch("mailto:${widget.email}");
                                         },
-                                        icon: Icon(Icons.email, color: Color(MyApp().myred),size: 33,),
+                                        icon: Icon(Icons.location_on, color: Color(MyApp().myred),size: 33,),
                                         
                                         label: Text(
-                                          widget.email,
+                                          widget.pickuplocation,
                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -101,6 +117,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                                           ),
                                           ),
                                       ),
+                                      
         
                             ],
                           ),
@@ -110,13 +127,13 @@ class _DriverDetailsState extends State<DriverDetails> {
                           
                          MyProgressButton(
                             pressed: widget.pressed,
-                            placeHolder: widget.placeHolder,
+                            placeHolder: widget.placeHolder ?? '',
                             )
                         ,
                          
                         MyProgressButton(
                             pressed: widget.trackDriver,
-                            placeHolder: 'See Drivers Location',
+                            placeHolder: "See ${widget.userType}'s Location",
                             )
                         
                   ],

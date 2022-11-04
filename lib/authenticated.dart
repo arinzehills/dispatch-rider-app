@@ -1,16 +1,17 @@
-
-import 'dart:ffi';
+import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dispacher_app/admin/admin_dashboard.dart';
 import 'package:dispacher_app/components/bottomNav.dart';
 import 'package:dispacher_app/drivers/drivers_location.dart';
 import 'package:dispacher_app/models/usersDetail.dart';
-import 'package:dispacher_app/testfile.dart';
 import 'package:dispacher_app/users/place_order.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -38,12 +39,72 @@ class _AuthenticatedState extends State<Authenticated> {
       UserCredential user;
       bool loading=false;
 
+  ConnectivityResult previous;
+  StreamSubscription _streamSubscription;
+  bool showdialog=false;
+    Future<bool> checkInternet() async {
+        try{
+          final result =await InternetAddress.lookup('google.com');
+      
+        if(result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+          //connection is available
+          // // Navigator.of(context).pop(false);
+          // setState(() {
+          //   showdialog=false;
+          // });
+          return Future.value(true);
+        }
+       
+    } on SocketException catch(_){
+      // no internet
+      // _showDialog();
+           return 
+          Future.value(false);
+         }
+    }
       @override
   void initState() {
     // TODO: implement initState
      
     super.initState();
-   
+        Connectivity().onConnectivityChanged.
+                    listen((ConnectivityResult connresult) {
+           if(connresult == ConnectivityResult.none){
+                        // no internet
+                        showdialog=true;
+                         showDialog(
+                            context: context,
+                          barrierDismissible: false, // user must tap button!
+                           builder:(context)=>AlertDialog(
+                              title:Text('No internet Connection available'),
+                              actions: <Widget>[
+                                      RaisedButton(
+                                  child: Text('Exit'),
+                                  color: Color(MyApp().myred),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
+                                  onPressed:()=>SystemChannels.
+                                            platform.invokeMethod('SystemNavigator.pop'),
+                                ),
+                              ]
+                            ),
+                         
+                         );
+          }else if (previous ==ConnectivityResult.none){
+            checkInternet().then((result){
+              if(result ==true){
+                //there is internet connection
+                if(showdialog==true){
+                  showdialog= false;
+                  Navigator.pop(context);
+                }
+              }
+            });
+          }
+               
+               previous = connresult;
+             });
+
     
   }
       Future <bool> _onBackPressed(){
@@ -70,6 +131,11 @@ class _AuthenticatedState extends State<Authenticated> {
     );
      
   }
+   @override
+  void dispose(){
+    super.dispose();
+    _streamSubscription.cancel();
+  }
   @override
   Widget build(BuildContext context) {
     final user= Provider.of<Users>(context);
@@ -89,7 +155,7 @@ class _AuthenticatedState extends State<Authenticated> {
           return WillPopScope(
              onWillPop: ()=>_onBackPressed(),
                 child: loading ? Loading():  Scaffold(
-               drawer: MyDrawer(name: userData.name,),
+               drawer: MyDrawer(name: userData.name,phone: userData.phone,),
                appBar:AppBar(
                  title: Text('Dispatcher Rider'),
                backgroundColor: Color(int.parse("0xffe37029")),
@@ -290,14 +356,23 @@ class _MyCardState extends State<MyCard> {
                                 fontWeight: FontWeight.bold, 
                                 ),
                             ),
-                            Text(
-                              widget.username + '!',
-                              style: TextStyle(
-                              fontSize: 32.0,
-                                  color: Colors.blue[200],
-                                fontWeight: FontWeight.bold, 
-                              ),  
-                          )
+                            SizedBox(
+                              width: 230,
+                              child: Wrap(
+                                       children: [
+                                           Text(
+                                    widget.username + '!',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                    fontSize: 32.0,
+                                        color: Colors.blue[200],
+                                      fontWeight: FontWeight.bold, 
+                                    ),  
+                            ),
+                          ],
+                              ),
+                            )
                       ],
               ),
               Text(

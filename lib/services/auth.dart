@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dispacher_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:dispacher_app/models/user.dart';
+
+
 class AuthService{
   final FirebaseAuth _auth= FirebaseAuth.instance;
 
@@ -28,14 +28,15 @@ class AuthService{
 
   //Register
     
-  Future register(String email, String password) async{
+  Future register(String email, String password,String phone,String name) async{
       try { 
         
         UserCredential result=  await _auth.
                                 createUserWithEmailAndPassword(email: email, password: password);
        User user=result.user;
       //  create new document for the user with uid
-      await DataBaseService(uid: user.uid).updateUserData('normalUser','false','Arinze', '082932', 'bosso',user.email);
+      await DataBaseService(uid: user.uid).updateUserData('normalUser','false', name, phone,
+                                           'Your Parmanent Address',user.email);
           return _userFromFirebaseUser(user);
       } catch(e){
         print(e.toString());
@@ -49,7 +50,8 @@ class AuthService{
                                 createUserWithEmailAndPassword(email: email, password: password);
           User driver=result.user;
       //  create new document for the user with uid
-      await DataBaseService(uid: driver.uid).updateUserData('normalUser','true','User Name', '8146596444', 'bosso',driver.email);
+      await DataBaseService(uid: driver.uid).updateUserData('normalUser','true','User Name', '8146596444',
+                                                             'Your address',driver.email);
           return _userFromFirebaseUser(driver);
       } catch(e){
         print(e.toString());
@@ -73,15 +75,15 @@ class AuthService{
   //signout
      Future signOut() async{
     try { 
-      
-      return await _auth.signOut();
+       await _auth.signOut();
     } catch(e){
       print(e.toString());
-      return null;
+     
     }
   }
  
 }
+
  class UserHelper {
     static FirebaseFirestore _db= FirebaseFirestore.instance;
     static saveUser(User user) async{

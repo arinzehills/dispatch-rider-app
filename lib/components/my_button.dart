@@ -14,10 +14,7 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 50.0,
-                                child:RaisedButton(
+                            child: RaisedButton(
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                   onPressed: pressed,
                                   color: Color(int.parse("0xffe37029")),
@@ -28,7 +25,7 @@ class MyButton extends StatelessWidget {
                                       ),
 
                                   ),
-                                ),
+                                
 
                                 ),
     );

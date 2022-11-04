@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'dart:convert';
 import 'package:geocoder/geocoder.dart' as geocoder;
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class DataBaseService{
 //collection reference
@@ -74,8 +73,8 @@ class DataBaseService{
         });
       }
     Future updateUserData(role,String isDriver,String userName, String phone,String address,String email) async {
-          var status = await OneSignal.shared.getPermissionSubscriptionState();
-          String tokenId = status.subscriptionStatus.userId;
+          // var status = await OneSignal.shared.getPermissionSubscriptionState();
+   
                                         
       return await usersCollection.doc(uid).set({
             'uid':uid,
@@ -108,9 +107,7 @@ class DataBaseService{
       return usersCollection.doc(uid).snapshots()
       .map(_userDataFromSnapshot );
     }
-    //users location
-  
-    
+    //users location    
     Future<DocumentReference> _addGeoPoint() async {
      await Firebase.initializeApp();
   var pos = await location.getLocation();

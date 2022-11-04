@@ -154,7 +154,7 @@ Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
                     child: Column(
                       children: [
                         Container(
-                          height: 434,
+                          height: 420,
                           width: MediaQuery.of(context).size.width,
                           child: GoogleMap(
                             initialCameraPosition: CameraPosition(
@@ -184,7 +184,7 @@ Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
                         ),
                         if (_currentPosition != null)
                           Text(
-                            "Latitude: ${_currentPosition.latitude}, Longitude: ${_currentPosition.longitude}",
+                            "Latitude: ${geopoint.latitude}, Longitude: ${geopoint.longitude}",
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Colors.deepOrangeAccent,
@@ -233,7 +233,9 @@ Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
                 ),
               ),
             );
-          }
+            } else{
+                return Loading();
+            }
           }
         ),
 

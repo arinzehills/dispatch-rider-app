@@ -42,7 +42,7 @@ class _SettingsState extends State<Settings> {
                   children: <Widget>[
                     Center(
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/2.JPG'),
+                        backgroundImage: AssetImage('assets/avatar.png'),
                         radius: 40.0,
                       ),
                     ),
@@ -156,59 +156,59 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     //for email
-                   Row(
-                     children: [
-                      SizedBox(
-                          width: 240,
-                          child: Wrap(
-                            children: [
-                              Text(
-                                userData.email,
-                                  maxLines: 1,
-                                 overflow: TextOverflow.ellipsis,
-                                style:TextStyle(
-                                  color:Color(MyApp().myred),
-                                  fontSize: 25.0,
-                                  letterSpacing: 2.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                         ),
-                       ),
-                        Spacer(),
-                           IconButton(
-                      icon: Icon(Icons.edit),
-                      color: Color(MyApp().myred),
-                       onPressed: (){
-                        showDialog(context: context,
-                                builder: (BuildContext context){
-                             return EditDetails(
-                               id: 3,
-                               title: 'Edit Details',
-                               hintText: userData.email,
-                               dataNameToUpdate: _currentEmail,
-                               );
-                          });
-                       }
-                        ),
-                        Icon(
-                          Icons.email,
-                          color: Color(MyApp().myred),
-                        ),
+                  //  Row(
+                  //    children: [
+                  //     SizedBox(
+                  //         width: 240,
+                  //         child: Wrap(
+                  //           children: [
+                  //             Text(
+                  //               userData.email,
+                  //                 maxLines: 1,
+                  //                overflow: TextOverflow.ellipsis,
+                  //               style:TextStyle(
+                  //                 color:Color(MyApp().myred),
+                  //                 fontSize: 25.0,
+                  //                 letterSpacing: 2.0,
+                  //                 fontWeight: FontWeight.bold,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //        ),
+                  //      ),
+                  //       Spacer(),
+                  //     //      IconButton(
+                  //     // icon: Icon(Icons.edit),
+                  //     // color: Color(MyApp().myred),
+                  //     //  onPressed: (){
+                  //     //   showDialog(context: context,
+                  //     //           builder: (BuildContext context){
+                  //     //        return EditDetails(
+                  //     //          id: 3,
+                  //     //          title: 'Edit Details',
+                  //     //          hintText: userData.email,
+                  //     //          dataNameToUpdate: _currentEmail,
+                  //     //          );
+                  //     //     });
+                  //     //  }
+                  //     //   ),
+                  //     //   Icon(
+                  //     //     Icons.email,
+                  //     //     color: Color(MyApp().myred),
+                  //     //   ),
                         
-                     ],
-                   ),
-                    SizedBox(height: 5,),
-                    Text(
-                      'email address',
-                      style:TextStyle(
-                        color:Color(MyApp().myblue),
-                        fontSize: 15.0,
-                        letterSpacing: 2.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  //    ],
+                  //  ),
+                    // SizedBox(height: 5,),
+                    // Text(
+                    //   'email address',
+                    //   style:TextStyle(
+                    //     color:Color(MyApp().myblue),
+                    //     fontSize: 15.0,
+                    //     letterSpacing: 2.0,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                     SizedBox(height:10),
                     //for Address
                     Row(
@@ -269,20 +269,20 @@ class _SettingsState extends State<Settings> {
                    Row(
                      children: [
                        //change password
-                       Text(
-                          'Change Password',
-                          style:TextStyle(
-                            color:Color(MyApp().myred),
-                            fontSize: 25.0,
-                            letterSpacing: 2.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                         Icon(
-                          Icons.edit,
-                          color: Color(MyApp().myred),
-                        )
+                      //  Text(
+                      //     'Change Password',
+                      //     style:TextStyle(
+                      //       color:Color(MyApp().myred),
+                      //       fontSize: 25.0,
+                      //       letterSpacing: 2.0,
+                      //       fontWeight: FontWeight.bold,
+                      //     ),
+                      //   ),
+                      //   Spacer(),
+                      //    Icon(
+                      //     Icons.edit,
+                      //     color: Color(MyApp().myred),
+                      //   )
                      ],
                    ),
                     SizedBox(height: 5,),

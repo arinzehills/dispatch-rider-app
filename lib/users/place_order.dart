@@ -1,23 +1,13 @@
 import 'dart:convert';
-
-import 'package:dispacher_app/components/constants.dart';
-import 'package:dispacher_app/components/loading.dart';
-import 'package:dispacher_app/drivers/driver_profile_pop.dart';
 import 'package:dispacher_app/drivers/drivers_location.dart';
 import 'package:dispacher_app/models/user.dart';
 import 'package:dispacher_app/models/usersDetail.dart';
 import 'package:dispacher_app/services/database.dart';
-import 'package:dispacher_app/users/homepage_card.dart';
-import 'package:dispacher_app/components/my_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dispacher_app/users/placeorder_detail.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:dispacher_app/main.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart';
-import 'package:intl/intl.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -46,6 +36,7 @@ class PlaceOrder extends StatefulWidget {
 
 class _PlaceOrderState extends State<PlaceOrder> {
   String sendOrder='Send Order';
+  String pickup='';
     @override
     void initState(){
       super.initState();
@@ -96,7 +87,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
     void sendNotification(){
       flutterLocalNotificationsPlugin.show(
         0,
-         'test','Testing time',
+         'Order','You send an order',
          NotificationDetails(
            android:AndroidNotificationDetails(
              channel.id,
@@ -113,36 +104,13 @@ class _PlaceOrderState extends State<PlaceOrder> {
     Widget _buildList(){
       // final List<String> drivers = <String>['A', 'B', 'C','A', 'B', 'C','A', 'B', 'C'];
       final Stream<QuerySnapshot> stream=FirebaseFirestore.instance
-    .collection('users')
-    .where('isDriver', isEqualTo: 'true').snapshots();  
-    final user= Provider.of<Users>(context);
+                                  .collection('users')
+                                  .where('isDriver', isEqualTo: 'true').snapshots();  
+      final user= Provider.of<Users>(context);
    
     //send order to data base to a driver
-     seOrder(DocumentSnapshot snapshot, driversUid,) async{
-        dynamic  data= snapshot.data();
-       DataBaseService(uid: user.uid).userData;
-         UsersDetail userData=data;
-         String message =userData.name + 'sent you an order';
-        final CollectionReference ordersCollection=FirebaseFirestore.instance.collection('drivers');
-        return await ordersCollection.doc(driversUid).set({
-          'CustomerName' : userData.name,
-          'message': message
-        });
-    }
-    driversOrders(uid,driverName,customersName,message) async {
-      return await  FirebaseFirestore.instance.collection('driverOrders')
-                                        .doc(uid).collection('orders')
-                                        .add({
-                                        'Customeruid': user.uid,
-                                        'driversuid':uid,
-                                        'driversName': driverName,
-                                        'CustomersName' :customersName,
-                                        'message': message,
-                                        'Date':DateTime.now().toString(),
-                                        'TimeStamp':DateTime.now(),
-                                        'Time':DateFormat.jm().format(DateTime.now()),
-                                            });
-    }
+    
+    
       return 
       StreamBuilder<QuerySnapshot>(
         stream:  stream,
@@ -171,44 +139,44 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                     ),
                           subtitle: Padding(
                             padding: EdgeInsets.all(3.0),
-                            child: Row(
-                                  children: [
-                                            Icon(
-                                                   Icons.location_on,
-                                                  color: Colors.green,
-                                                  size: 13,
-                                                ),
-                                          SizedBox(
-                                            width: 50,
-                                            child: Wrap(
-                                              children: [
+                            // child: Row(
+                            //       children: [
+                            //                 Icon(
+                            //                        Icons.location_on,
+                            //                       color: Colors.green,
+                            //                       size: 13,
+                            //                     ),
+                            //               SizedBox(
+                            //                 width: 50,
+                            //                 child: Wrap(
+                            //                   children: [
                                                 
-                                            Text(
-                                              'Bosso dfdsadsadfdhgjhfhfjhfjh',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: Colors.black, 
-                                                    fontSize:10
-                                                  ),
-                                            ),
-                                             ],
-                                            ),
-                                          ),
-                                          Spacer(),
-                                           Text(
-                                          'Available',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize:10
-                                              ),
-                                          ),
-                                          Icon(
-                                            Icons.toggle_on,
-                                            color: Colors.green,
-                                          ),
-                                    ],
-                                 ),
+                            //                 // Text(
+                            //                 //   'Bosso dfdsadsadfdhgjhfhfjhfjh',
+                            //                 //   maxLines: 1,
+                            //                 //   overflow: TextOverflow.ellipsis,
+                            //                 //     style: TextStyle(
+                            //                 //         color: Colors.black, 
+                            //                 //         fontSize:10
+                            //                 //       ),
+                            //                 // ),
+                            //                  ],
+                            //                 ),
+                            //               ),
+                            //               Spacer(),
+                            //                Text(
+                            //               'Available',
+                            //                 style: TextStyle(
+                            //                     color: Colors.black,
+                            //                     fontSize:10
+                            //                   ),
+                            //               ),
+                            //               Icon(
+                            //                 Icons.toggle_on,
+                            //                 color: Colors.green,
+                            //               ),
+                            //         ],
+                            //      ),
                           ),
                           contentPadding: EdgeInsets.fromLTRB(-7,5,3, 5),
                           leading:  CircleAvatar(
@@ -216,7 +184,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
                           radius: Constants.avatarRadius,
                           child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(Constants.avatarRadius)),
-                          child: Image.asset("assets/2.JPG")
+                          child: Image.asset("assets/avatar.png")
                                         ),
                                      ),
                           onTap:() => {
@@ -234,53 +202,28 @@ class _PlaceOrderState extends State<PlaceOrder> {
                                    String message =userData.name + 'sent you an order';
                                final CollectionReference ordersCollection=
                                 FirebaseFirestore.instance.collection('orders');
-                                  
+                                    
                                   var colorofOrderButton=Color;
-                                 return DriverDetails(
-                                   
+                                 return PlaceOrderDetails(
+                                   driversuid: data['uid'],
                                    title: data['userName'],
+                                   driversName: data['userName'],
                                     phone: data['phone'],
                                     email: data['email'],
-                                      trackDriver: ()async{
-                                         Navigator.of(context).push(
-                                              MaterialPageRoute(builder: (context) => 
-                                              DriversLocation(uid: data['uid'],driversName:data['userName'])));
-                                      },
-                                       pressed: () async{
+                                    message: message,
+                                    customersName:userData.name ,
+                                    customersuid: userData.uid,
+                                    customersPhone: userData.phone,
+                                    sendOrder: sendOrder,
+                                    pressed: () async{
+                                      sendNotification();
+                                    },
+                                    trackDriver: ()async{
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (context) => 
+                                            DriversLocation(uid: data['uid'],driversName:data['userName'])));
+                                    },
 
-                                         driversOrders(data['uid'], data['name'], userData.name, message);
-                                         sendNotification();
-
-                                        //  var status = await OneSignal.shared.getPermissionSubscriptionState();
-                                        //  String tokenId = status.subscriptionStatus.userId;
-                                        //  sendNotification([tokenId], 'An Order Has been Sent to You','order');
-                                          
-                                          return await  FirebaseFirestore.instance.collection('orders')
-                                                        .doc(user.uid).collection('user_orders').add({
-                                        'Customeruid': user.uid,
-                                        'driversuid':data['uid'],
-                                        'driversName': data['userName'],
-                                        'CustomersName' : userData.name,
-                                        'message': message,
-                                        'Date':DateTime.now().toString(),
-                                        'TimeStamp':DateTime.now(),
-                                        'Time':DateFormat.jm().format(DateTime.now()),
-                                            })
-                                            .then((_) {
-                                            setState(() {
-                                              sendOrder='Order Placed';
-                                              
-                                            });
-                                
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(content: Text('Successfully')));
-                                            
-                                          }).catchError((onError) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(content: Text(onError)));
-                                          });
-                                          
-                                       },
                                         placeHolder: sendOrder,
                                      );
                                  }else {
@@ -360,7 +303,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
               radius: Constants.avatarRadius,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(Constants.avatarRadius)),
-                  child: Image.asset("assets/2.JPG")
+                  child: Image.asset("assets/dispatch_app_icon.png")
               ),
             ),
         ),
